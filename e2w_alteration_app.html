@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easy 2 Wear — Alterations</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f7f6f3;min-height:100vh;color:#1c1c1a}
+.app{max-width:620px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.screen{display:none}.screen.active{display:block}
+.nav{display:inline-flex;background:#eeede9;border-radius:10px;padding:4px;margin-bottom:2rem}
+.nav-btn{font-size:13px;font-weight:500;padding:6px 20px;border-radius:7px;border:none;background:transparent;color:#888;cursor:pointer;transition:all .2s;letter-spacing:.2px}
+.nav-btn.active{background:#fff;color:#1c1c1a;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.brand{margin-bottom:2.5rem}
+.brand-name{font-size:26px;font-weight:600;letter-spacing:3px;color:#1c1c1a}
+.brand-tag{font-size:12px;color:#aaa;letter-spacing:1px;margin-top:4px;text-transform:uppercase}
+.brand-divider{width:32px;height:1.5px;background:#1c1c1a;margin-top:12px}
+.card{background:#fff;border-radius:16px;padding:1.75rem;margin-bottom:16px;border:1px solid #ebebE6}
+.card-title{font-size:13px;font-weight:500;color:#aaa;letter-spacing:.8px;text-transform:uppercase;margin-bottom:1.25rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:500;color:#aaa;letter-spacing:.5px;text-transform:uppercase}
+.field input,.field textarea{font-size:16px;padding:13px 14px;border:1.5px solid #eee;border-radius:9px;width:100%;background:#fafaf8;color:#1c1c1a;outline:none;transition:border .15s;font-family:inherit}
+.field input:focus,.field textarea:focus{border-color:#1c1c1a;background:#fff}
+.field textarea{resize:vertical;min-height:88px;line-height:1.7}
+.submit-btn{width:100%;margin-top:16px;padding:13px;font-size:14px;font-weight:500;border-radius:10px;border:none;background:#1c1c1a;color:#fff;cursor:pointer;letter-spacing:.4px;transition:opacity .15s;font-family:inherit}
+.submit-btn:hover{opacity:.82}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed}
+.success-box{background:#fff;border:1px solid #ebebE6;border-radius:16px;padding:2.5rem 1.75rem;text-align:center;display:none}
+.success-icon{width:48px;height:48px;border-radius:50%;background:#f0faf4;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:20px}
+.success-name{font-size:20px;font-weight:600;color:#1c1c1a;margin-bottom:8px}
+.success-msg{font-size:13px;color:#888;line-height:1.9}
+.success-store{font-size:12px;color:#bbb;margin-top:12px;letter-spacing:.3px}
+.another-btn{margin-top:1.5rem;font-size:13px;padding:8px 20px;border-radius:8px;border:1.5px solid #ddd;background:transparent;color:#555;cursor:pointer;font-family:inherit;transition:all .15s}
+.another-btn:hover{border-color:#1c1c1a;color:#1c1c1a}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
+.stat{background:#fff;border:1px solid #ebebE6;border-radius:12px;padding:1rem;text-align:center}
+.stat-num{font-size:26px;font-weight:600;color:#1c1c1a}
+.stat-lbl{font-size:10px;font-weight:500;color:#bbb;letter-spacing:.6px;text-transform:uppercase;margin-top:3px}
+.stat-pending .stat-num{color:#c47d00}
+.stat-ready .stat-num{color:#1a7a4a}
+.stat-collected .stat-num{color:#1a52a0}
+.search-wrap{position:relative;margin-bottom:12px}
+.search-wrap input{width:100%;font-size:13px;padding:10px 12px 10px 36px;border:1.5px solid #eee;border-radius:10px;background:#fff;outline:none;font-family:inherit;color:#1c1c1a;transition:border .15s}
+.search-wrap input:focus{border-color:#1c1c1a}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#bbb;font-size:14px;pointer-events:none}
+.filters{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
+.filter-btn{font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;border:1.5px solid #eee;background:transparent;color:#aaa;cursor:pointer;transition:all .15s;font-family:inherit}
+.filter-btn.active{background:#1c1c1a;color:#fff;border-color:#1c1c1a}
+.entry-card{background:#fff;border:1px solid #ebebE6;border-radius:14px;padding:1.25rem;margin-bottom:10px;transition:box-shadow .15s}
+.entry-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.entry-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.entry-name{font-size:15px;font-weight:600;color:#1c1c1a}
+.entry-meta{font-size:12px;color:#aaa;margin-top:3px;line-height:1.8}
+.entry-meta strong{color:#888;font-weight:500}
+.badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap;letter-spacing:.2px}
+.badge-pending{background:#fef6e4;color:#b07800}
+.badge-ready{background:#e6f7ef;color:#1a7a4a}
+.badge-collected{background:#e8f0fb;color:#1a52a0}
+.entry-notes{font-size:12px;color:#999;margin-top:10px;padding-top:10px;border-top:1px solid #f0f0ea;line-height:1.7;white-space:pre-wrap}
+.log-list{margin-top:8px;padding-top:8px;border-top:1px dashed #eee}
+.log-entry{font-size:11px;color:#ccc;margin-bottom:2px;letter-spacing:.1px}
+.entry-actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.btn{font-size:12px;font-weight:500;padding:5px 12px;border-radius:7px;border:1.5px solid #eee;background:transparent;color:#888;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn:hover{background:#f7f6f3;border-color:#ddd}
+.btn-green{color:#1a7a4a;border-color:#b2dfc4}
+.btn-green:hover{background:#f0faf4}
+.btn-red{color:#c0392b;border-color:#f5c0bb;padding:4px 9px;font-size:11px}
+.btn-red:hover{background:#fff5f4}
+.empty{text-align:center;color:#ccc;font-size:13px;padding:3rem 0;letter-spacing:.2px}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1c1c1a;color:#fff;font-size:13px;padding:10px 20px;border-radius:10px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1}
+.loading{text-align:center;color:#bbb;font-size:13px;padding:2rem 0}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- CUSTOMER SCREEN -->
+<div class="screen active" id="screen-customer">
+  <div class="nav">
+    <button class="nav-btn active" onclick="showScreen('customer',this)">Customer</button>
+    <button class="nav-btn" onclick="showScreen('staff',this)">Admin</button>
+  </div>
+  <div class="brand">
+    <div class="brand-name">EASY 2 WEAR</div>
+    <div class="brand-tag">Alteration request</div>
+    <div class="brand-divider"></div>
+  </div>
+  <div class="card" id="c-form-wrap">
+    <div class="card-title">Your details</div>
+    <div class="form-grid">
+      <div class="field"><label>Full name *</label><input type="text" id="c-name"></div>
+      <div class="field"><label>Phone number *</label><input type="tel" inputmode="numeric" id="c-phone"></div>
+      <div class="field"><label>Bill number *</label><input type="text" id="c-bill"></div>
+      <div class="field"><label>No. of pieces *</label><input type="number" id="c-pieces" min="1"></div>
+      <div class="field form-full"><label>Date</label><input type="date" id="c-date"></div>
+      <div class="field form-full"><label>Alteration notes</label><textarea id="c-notes"></textarea></div>
+    </div>
+    <button class="submit-btn" id="c-submit-btn" onclick="submitCustomer()">Submit request</button>
+  </div>
+  <div class="success-box" id="c-success">
+    <div class="success-icon">✓</div>
+    <div class="success-name" id="c-success-name"></div>
+    <div class="success-msg">Your alteration request has been noted.<br>We'll give you a call as soon as it's ready.</div>
+    <div class="success-store">Easy 2 Wear · Nungambakkam High Road, Chennai</div>
+    <button class="another-btn" onclick="resetCustomer()">Submit another request</button>
+  </div>
+</div>
+
+<!-- ADMIN SCREEN -->
+<div class="screen" id="screen-staff">
+  <div class="nav">
+    <button class="nav-btn" onclick="showScreen('customer',this)">Customer</button>
+    <button class="nav-btn active" onclick="showScreen('staff',this)">Admin</button>
+  </div>
+  <div class="stats">
+    <div class="stat stat-pending"><div class="stat-num" id="s-pending">—</div><div class="stat-lbl">Pending</div></div>
+    <div class="stat stat-ready"><div class="stat-num" id="s-ready">—</div><div class="stat-lbl">Ready</div></div>
+    <div class="stat stat-collected"><div class="stat-num" id="s-collected">—</div><div class="stat-lbl">Collected</div></div>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="s-search" placeholder="Search by name, phone, bill number, notes…" oninput="renderStaff()">
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
+    <button class="filter-btn" onclick="setFilter('ready',this)">Ready</button>
+    <button class="filter-btn" onclick="setFilter('collected',this)">Collected</button>
+  </div>
+  <div id="s-list"><div class="loading">Loading…</div></div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPA_URL='https://fivbheyjnaafqclphvjj.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpdmJoZXlqbmFhZnFjbHBodmpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3OTE2MzQsImV4cCI6MjA5MzM2NzYzNH0.dMZ76290NbICD9GruR85ZgR2glghTZjdezNFEp0L0OE';
+const HDR={'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
+
+let data=[],sFilter='all';
+
+function today(){return new Date().toISOString().slice(0,10)}
+document.getElementById('c-date').value=today();
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+async function fetchData(){
+  try{
+    const r=await fetch(SUPA_URL+'/rest/v1/alterations?order=created_at.desc',{headers:HDR});
+    data=await r.json();
+    if(!Array.isArray(data))data=[];
+  }catch(e){data=[];showToast('Connection error');}
+  renderStaff();
+}
+
+async function insertRow(row){
+  const r=await fetch(SUPA_URL+'/rest/v1/alterations',{method:'POST',headers:{...HDR,'Prefer':'return=minimal'},body:JSON.stringify(row)});
+  return r.ok;
+}
+
+async function updateRow(id,fields){
+  const r=await fetch(SUPA_URL+'/rest/v1/alterations?id=eq.'+id,{method:'PATCH',headers:{...HDR,'Prefer':'return=minimal'},body:JSON.stringify(fields)});
+  return r.ok;
+}
+
+async function deleteRow(id){
+  const r=await fetch(SUPA_URL+'/rest/v1/alterations?id=eq.'+id,{method:'DELETE',headers:HDR});
+  return r.ok;
+}
+
+function fmt(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return d+'/'+m+'/'+y}
+function ts(){const n=new Date();return n.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})+' · '+n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}
+
+function showScreen(s,el){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('screen-'+s).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  if(s==='staff')fetchData();
+}
+
+async function submitCustomer(){
+  const name=document.getElementById('c-name').value.trim();
+  const phone=document.getElementById('c-phone').value.trim();
+  const bill=document.getElementById('c-bill').value.trim();
+  const pieces=parseInt(document.getElementById('c-pieces').value)||1;
+  const date=document.getElementById('c-date').value||today();
+  const notes=document.getElementById('c-notes').value.trim();
+  if(!name||!phone||!bill){showToast('Please fill name, phone and bill number.');return;}
+  const btn=document.getElementById('c-submit-btn');
+  btn.disabled=true;btn.textContent='Submitting…';
+  const ok=await insertRow({id:Date.now().toString(),name,phone,bill,pieces,date,notes,status:'pending',logs:[]});
+  btn.disabled=false;btn.textContent='Submit request';
+  if(!ok){showToast('Failed to save. Check connection.');return;}
+  document.getElementById('c-form-wrap').style.display='none';
+  document.getElementById('c-success-name').textContent='Thank you, '+name+'!';
+  document.getElementById('c-success').style.display='block';
+}
+
+function resetCustomer(){
+  ['c-name','c-phone','c-bill','c-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('c-pieces').value='';
+  document.getElementById('c-date').value=today();
+  document.getElementById('c-form-wrap').style.display='block';
+  document.getElementById('c-success').style.display='none';
+}
+
+function setFilter(f,el){
+  sFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderStaff();
+}
+
+function renderStaff(){
+  const q=(document.getElementById('s-search').value||'').toLowerCase();
+  document.getElementById('s-pending').textContent=data.filter(x=>x.status==='pending').length;
+  document.getElementById('s-ready').textContent=data.filter(x=>x.status==='ready').length;
+  document.getElementById('s-collected').textContent=data.filter(x=>x.status==='collected').length;
+
+  let list=sFilter==='all'?data:data.filter(x=>x.status===sFilter);
+  if(q)list=list.filter(x=>
+    x.name.toLowerCase().includes(q)||
+    x.phone.toLowerCase().includes(q)||
+    x.bill.toLowerCase().includes(q)||
+    (x.notes&&x.notes.toLowerCase().includes(q))||
+    String(x.pieces).includes(q)
+  );
+
+  const el=document.getElementById('s-list');
+  if(!list.length){el.innerHTML='<div class="empty">No entries found.</div>';return;}
+
+  el.innerHTML=list.map(e=>{
+    const bc=e.status==='pending'?'badge-pending':e.status==='ready'?'badge-ready':'badge-collected';
+    const bt=e.status==='pending'?'Pending':e.status==='ready'?'Ready':'Collected';
+    const logs=Array.isArray(e.logs)&&e.logs.length?`<div class="log-list">${e.logs.map(l=>`<div class="log-entry">${l}</div>`).join('')}</div>`:'';
+    const notes=e.notes?`<div class="entry-notes">${e.notes}</div>`:'';
+    const informed=Array.isArray(e.logs)&&e.logs.some(l=>l.startsWith('Called')||l.startsWith('WhatsApp')||l.startsWith('SMS'));
+    const actions=e.status==='pending'
+      ?`<button class="btn btn-green" onclick="markReady('${e.id}')">Mark as ready</button>`
+      :e.status==='ready'
+      ?`<button class="btn" onclick="logA('${e.id}','Called')">Called</button>
+        <button class="btn" onclick="logA('${e.id}','WhatsApp sent')">WhatsApp</button>
+        <button class="btn" onclick="logA('${e.id}','SMS sent')">SMS</button>
+        ${informed?`<button class="btn btn-green" onclick="markCollected('${e.id}')">Mark collected</button>`:`<span style="font-size:11px;color:#ccc;letter-spacing:.2px;">Inform customer first</span>`}`
+      :`<span style="font-size:12px;color:#ccc;letter-spacing:.2px;">Completed</span>`;
+    return `<div class="entry-card">
+      <div class="entry-head">
+        <div>
+          <div class="entry-name">${e.name}</div>
+          <div class="entry-meta">Bill <strong>${e.bill}</strong> &nbsp;·&nbsp; ${e.pieces} pc${e.pieces>1?'s':''} &nbsp;·&nbsp; ${fmt(e.date)}<br>${e.phone}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;">
+          <span class="badge ${bc}">${bt}</span>
+          <button class="btn btn-red" onclick="del('${e.id}')">✕</button>
+        </div>
+      </div>
+      ${notes}${logs}
+      <div class="entry-actions">${actions}</div>
+    </div>`;
+  }).join('');
+}
+
+async function markReady(id){
+  const e=data.find(x=>x.id===id);if(!e)return;
+  const logs=[...(e.logs||[]),'Marked ready — '+ts()];
+  const ok=await updateRow(id,{status:'ready',logs});
+  if(ok){e.status='ready';e.logs=logs;renderStaff();showToast('Marked as ready');}
+  else showToast('Update failed');
+}
+
+async function markCollected(id){
+  const e=data.find(x=>x.id===id);if(!e)return;
+  const logs=[...(e.logs||[]),'Collected — '+ts()];
+  const ok=await updateRow(id,{status:'collected',logs});
+  if(ok){e.status='collected';e.logs=logs;renderStaff();showToast('Marked as collected');}
+  else showToast('Update failed');
+}
+
+async function logA(id,type){
+  const e=data.find(x=>x.id===id);if(!e)return;
+  const logs=[...(e.logs||[]),type+' — '+ts()];
+  const ok=await updateRow(id,{logs});
+  if(ok){e.logs=logs;renderStaff();showToast(type+' logged');}
+  else showToast('Update failed');
+}
+
+async function del(id){
+  if(!confirm('Delete this entry?'))return;
+  const ok=await deleteRow(id);
+  if(ok){data=data.filter(x=>x.id!==id);renderStaff();showToast('Entry deleted');}
+  else showToast('Delete failed');
+}
+
+fetchData();
+</script>
+</body>
+</html>
