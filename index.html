@@ -3,306 +3,975 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Easy 2 Wear — Alterations</title>
+<title>Easy 2 Wear — Store Manager</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#f7f6f3;min-height:100vh;color:#1c1c1a}
-.app{max-width:620px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.app{max-width:680px;margin:0 auto;padding:2rem 1.25rem 4rem}
 .screen{display:none}.screen.active{display:block}
-.nav{display:inline-flex;background:#eeede9;border-radius:10px;padding:4px;margin-bottom:2rem}
-.nav-btn{font-size:13px;font-weight:500;padding:6px 20px;border-radius:7px;border:none;background:transparent;color:#888;cursor:pointer;transition:all .2s;letter-spacing:.2px}
+.nav{display:flex;background:#eeede9;border-radius:12px;padding:4px;margin-bottom:2rem;gap:3px}
+.nav-btn{flex:1;font-size:12px;font-weight:500;padding:7px 6px;border-radius:8px;border:none;background:transparent;color:#888;cursor:pointer;transition:all .2s;text-align:center;letter-spacing:.1px}
 .nav-btn.active{background:#fff;color:#1c1c1a;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.brand{margin-bottom:2.5rem}
-.brand-name{font-size:26px;font-weight:600;letter-spacing:3px;color:#1c1c1a}
+.brand{margin-bottom:2rem}
+.brand-name{font-size:24px;font-weight:600;letter-spacing:3px;color:#1c1c1a}
 .brand-tag{font-size:12px;color:#aaa;letter-spacing:1px;margin-top:4px;text-transform:uppercase}
-.brand-divider{width:32px;height:1.5px;background:#1c1c1a;margin-top:12px}
+.brand-divider{width:32px;height:1.5px;background:#1c1c1a;margin-top:10px}
 .card{background:#fff;border-radius:16px;padding:1.75rem;margin-bottom:16px;border:1px solid #ebebE6}
-.card-title{font-size:13px;font-weight:500;color:#aaa;letter-spacing:.8px;text-transform:uppercase;margin-bottom:1.25rem}
+.card-title{font-size:12px;font-weight:500;color:#aaa;letter-spacing:.8px;text-transform:uppercase;margin-bottom:1.25rem}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .form-full{grid-column:1/-1}
 .field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:12px;font-weight:500;color:#aaa;letter-spacing:.5px;text-transform:uppercase}
-.field input,.field textarea{font-size:16px;padding:13px 14px;border:1.5px solid #eee;border-radius:9px;width:100%;background:#fafaf8;color:#1c1c1a;outline:none;transition:border .15s;font-family:inherit}
-.field input:focus,.field textarea:focus{border-color:#1c1c1a;background:#fff}
-.field textarea{resize:vertical;min-height:88px;line-height:1.7}
-.submit-btn{width:100%;margin-top:16px;padding:13px;font-size:14px;font-weight:500;border-radius:10px;border:none;background:#1c1c1a;color:#fff;cursor:pointer;letter-spacing:.4px;transition:opacity .15s;font-family:inherit}
+.field label{font-size:11px;font-weight:500;color:#aaa;letter-spacing:.5px;text-transform:uppercase}
+.field input,.field textarea,.field select{font-size:15px;padding:11px 13px;border:1.5px solid #eee;border-radius:9px;width:100%;background:#fafaf8;color:#1c1c1a;outline:none;transition:border .15s;font-family:inherit}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#1c1c1a;background:#fff}
+.field textarea{resize:vertical;min-height:76px;line-height:1.7}
+.field input.error{border-color:#e74c3c}
+.field-hint{font-size:11px;color:#e07000;margin-top:3px;display:none}
+.field-hint.show{display:block}
+.divider-label{font-size:11px;font-weight:500;color:#bbb;letter-spacing:.6px;text-transform:uppercase;margin:16px 0 12px;display:flex;align-items:center;gap:8px}
+.divider-label::before,.divider-label::after{content:'';flex:1;height:1px;background:#eee}
+.submit-btn{width:100%;margin-top:14px;padding:12px;font-size:14px;font-weight:500;border-radius:10px;border:none;background:#1c1c1a;color:#fff;cursor:pointer;letter-spacing:.4px;transition:opacity .15s;font-family:inherit}
 .submit-btn:hover{opacity:.82}
 .submit-btn:disabled{opacity:.4;cursor:not-allowed}
-.success-box{background:#fff;border:1px solid #ebebE6;border-radius:16px;padding:2.5rem 1.75rem;text-align:center;display:none}
-.success-icon{width:48px;height:48px;border-radius:50%;background:#f0faf4;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:20px}
-.success-name{font-size:20px;font-weight:600;color:#1c1c1a;margin-bottom:8px}
-.success-msg{font-size:13px;color:#888;line-height:1.9}
-.success-store{font-size:12px;color:#bbb;margin-top:12px;letter-spacing:.3px}
-.another-btn{margin-top:1.5rem;font-size:13px;padding:8px 20px;border-radius:8px;border:1.5px solid #ddd;background:transparent;color:#555;cursor:pointer;font-family:inherit;transition:all .15s}
+.success-box{background:#fff;border:1px solid #ebebE6;border-radius:16px;padding:2rem 1.75rem;text-align:center;display:none}
+.success-icon{width:44px;height:44px;border-radius:50%;background:#f0faf4;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-size:18px}
+.success-name{font-size:18px;font-weight:600;color:#1c1c1a;margin-bottom:6px}
+.success-msg{font-size:13px;color:#888;line-height:1.8}
+.success-store{font-size:11px;color:#bbb;margin-top:10px}
+.another-btn{margin-top:1.25rem;font-size:13px;padding:7px 18px;border-radius:8px;border:1.5px solid #ddd;background:transparent;color:#555;cursor:pointer;font-family:inherit}
 .another-btn:hover{border-color:#1c1c1a;color:#1c1c1a}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
-.stat{background:#fff;border:1px solid #ebebE6;border-radius:12px;padding:1rem;text-align:center}
-.stat-num{font-size:26px;font-weight:600;color:#1c1c1a}
-.stat-lbl{font-size:10px;font-weight:500;color:#bbb;letter-spacing:.6px;text-transform:uppercase;margin-top:3px}
+/* Admin stats */
+.admin-tabs{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
+.admin-tab{font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;border:1.5px solid #eee;background:transparent;color:#aaa;cursor:pointer;font-family:inherit;transition:all .15s}
+.admin-tab.active{background:#1c1c1a;color:#fff;border-color:#1c1c1a}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
+.stat{background:#fff;border:1px solid #ebebE6;border-radius:12px;padding:.85rem;text-align:center;cursor:pointer}
+.stat-num{font-size:22px;font-weight:600}
+.stat-lbl{font-size:10px;font-weight:500;color:#bbb;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
 .stat-pending .stat-num{color:#c47d00}
 .stat-ready .stat-num{color:#1a7a4a}
 .stat-collected .stat-num{color:#1a52a0}
-.search-wrap{position:relative;margin-bottom:12px}
-.search-wrap input{width:100%;font-size:13px;padding:10px 12px 10px 36px;border:1.5px solid #eee;border-radius:10px;background:#fff;outline:none;font-family:inherit;color:#1c1c1a;transition:border .15s}
+.period-bar{display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.period-lbl{font-size:11px;color:#bbb}
+.period-btn{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:1.5px solid #eee;background:transparent;color:#aaa;cursor:pointer;font-family:inherit;transition:all .15s}
+.period-btn.active{background:#1c1c1a;color:#fff;border-color:#1c1c1a}
+.search-wrap{position:relative;margin-bottom:10px}
+.search-wrap input{width:100%;font-size:13px;padding:9px 12px 9px 34px;border:1.5px solid #eee;border-radius:10px;background:#fff;outline:none;font-family:inherit;color:#1c1c1a;transition:border .15s}
 .search-wrap input:focus{border-color:#1c1c1a}
-.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#bbb;font-size:14px;pointer-events:none}
-.filters{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
-.filter-btn{font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px;border:1.5px solid #eee;background:transparent;color:#aaa;cursor:pointer;transition:all .15s;font-family:inherit}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#bbb;font-size:13px;pointer-events:none}
+.filters{display:flex;gap:5px;margin-bottom:1.1rem;flex-wrap:wrap}
+.filter-btn{font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;border:1.5px solid #eee;background:transparent;color:#aaa;cursor:pointer;font-family:inherit;transition:all .15s}
 .filter-btn.active{background:#1c1c1a;color:#fff;border-color:#1c1c1a}
-.entry-card{background:#fff;border:1px solid #ebebE6;border-radius:14px;padding:1.25rem;margin-bottom:10px;transition:box-shadow .15s}
-.entry-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.entry-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
-.entry-name{font-size:15px;font-weight:600;color:#1c1c1a}
-.entry-meta{font-size:12px;color:#aaa;margin-top:3px;line-height:1.8}
-.entry-meta strong{color:#888;font-weight:500}
-.badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap;letter-spacing:.2px}
+.day-sep{display:flex;align-items:center;gap:8px;margin:14px 0 8px}
+.day-sep-line{flex:1;height:1px;background:#ebebE6}
+.day-sep-label{font-size:10px;font-weight:500;color:#bbb;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
+.entry-card{background:#fff;border:1px solid #ebebE6;border-radius:14px;padding:1.1rem 1.2rem;margin-bottom:8px;transition:box-shadow .15s}
+.entry-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.entry-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
+.entry-name{font-size:14px;font-weight:600;color:#1c1c1a}
+.entry-meta{font-size:11px;color:#aaa;margin-top:3px;line-height:1.8}
+.entry-meta strong{color:#777;font-weight:500}
+.badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
 .badge-pending{background:#fef6e4;color:#b07800}
 .badge-ready{background:#e6f7ef;color:#1a7a4a}
 .badge-collected{background:#e8f0fb;color:#1a52a0}
-.entry-notes{font-size:12px;color:#999;margin-top:10px;padding-top:10px;border-top:1px solid #f0f0ea;line-height:1.7;white-space:pre-wrap}
-.log-list{margin-top:8px;padding-top:8px;border-top:1px dashed #eee}
-.log-entry{font-size:11px;color:#ccc;margin-bottom:2px;letter-spacing:.1px}
-.entry-actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;align-items:center}
-.btn{font-size:12px;font-weight:500;padding:5px 12px;border-radius:7px;border:1.5px solid #eee;background:transparent;color:#888;cursor:pointer;transition:all .15s;font-family:inherit}
-.btn:hover{background:#f7f6f3;border-color:#ddd}
-.btn-green{color:#1a7a4a;border-color:#b2dfc4}
-.btn-green:hover{background:#f0faf4}
-.btn-red{color:#c0392b;border-color:#f5c0bb;padding:4px 9px;font-size:11px}
-.btn-red:hover{background:#fff5f4}
-.empty{text-align:center;color:#ccc;font-size:13px;padding:3rem 0;letter-spacing:.2px}
-.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1c1c1a;color:#fff;font-size:13px;padding:10px 20px;border-radius:10px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.badge-notpaid{background:#fdecea;color:#c0392b}
+.badge-partial{background:#fef6e4;color:#b07800}
+.badge-paid{background:#e6f7ef;color:#1a7a4a}
+.entry-notes{font-size:12px;color:#999;margin-top:8px;padding-top:8px;border-top:1px solid #f0f0ea;line-height:1.6;white-space:pre-wrap}
+.log-list{margin-top:6px;padding-top:6px;border-top:1px dashed #eee}
+.log-entry{font-size:11px;color:#ccc;margin-bottom:2px}
+.entry-actions{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.entry-actions-row2{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;align-items:center;padding-top:7px;border-top:1px dashed #eee}
+.btn{font-size:11px;font-weight:500;padding:5px 11px;border-radius:7px;border:1.5px solid #eee;background:transparent;color:#888;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn:hover{background:#f7f6f3}
+.btn-green{color:#1a7a4a;border-color:#b2dfc4}.btn-green:hover{background:#f0faf4}
+.btn-red{color:#c0392b;border-color:#f5c0bb;padding:4px 8px}.btn-red:hover{background:#fff5f4}
+.btn-blue{color:#1a52a0;border-color:#b0c8f0;padding:4px 8px}.btn-blue:hover{background:#f0f4fc}
+.btn-purple{color:#6b3fa0;border-color:#d4b8f0;padding:4px 8px}.btn-purple:hover{background:#f8f0ff}
+.btn-orange{color:#9a5000;border-color:#f0c890;padding:4px 8px}.btn-orange:hover{background:#fff8ee}
+.empty{text-align:center;color:#ccc;font-size:13px;padding:2.5rem 0}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1c1c1a;color:#fff;font-size:13px;padding:9px 18px;border-radius:10px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1}
 .loading{text-align:center;color:#bbb;font-size:13px;padding:2rem 0}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;padding:1.5rem;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:14px;font-weight:600;color:#1c1c1a;margin-bottom:1.1rem}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:1.1rem}
+.modal-actions .btn{font-size:13px;padding:7px 16px}
+.ph-entry{font-size:12px;color:#555;padding:8px 0;border-bottom:1px solid #eee;line-height:1.7}
+.ph-entry:last-child{border-bottom:none}
+.alert-banner{background:#fff8e6;border:1.5px solid #f0c040;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem}
+.alert-banner-title{font-size:12px;font-weight:600;color:#9a6000;letter-spacing:.3px;margin-bottom:6px}
+.alert-item{font-size:12px;color:#7a4a00;padding:3px 0;line-height:1.7}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- CUSTOMER SCREEN -->
-<div class="screen active" id="screen-customer">
+<!-- ALTERATIONS SCREEN -->
+<div class="screen active" id="screen-alterations">
   <div class="nav">
-    <button class="nav-btn active" onclick="showScreen('customer',this)">Customer</button>
-    <button class="nav-btn" onclick="showScreen('staff',this)">Admin</button>
+    <button class="nav-btn active" onclick="showScreen('alterations',this)">Alterations</button>
+    <button class="nav-btn" onclick="showScreen('orders',this)">Orders</button>
+    <button class="nav-btn" onclick="showScreen('requirements',this)">Requirements</button>
+    <button class="nav-btn" onclick="showScreen('admin',this)">Admin</button>
   </div>
-  <div class="brand">
-    <div class="brand-name">EASY 2 WEAR</div>
-    <div class="brand-tag">Alteration request</div>
-    <div class="brand-divider"></div>
-  </div>
-  <div class="card" id="c-form-wrap">
+  <div class="brand"><div class="brand-name">EASY 2 WEAR</div><div class="brand-tag">Alteration request</div><div class="brand-divider"></div></div>
+  <div class="card" id="alt-form-wrap">
     <div class="card-title">Your details</div>
     <div class="form-grid">
-      <div class="field"><label>Full name *</label><input type="text" id="c-name"></div>
-      <div class="field"><label>Phone number *</label><input type="tel" inputmode="numeric" id="c-phone"></div>
-      <div class="field"><label>Bill number *</label><input type="text" id="c-bill"></div>
-      <div class="field"><label>No. of pieces *</label><input type="number" id="c-pieces" min="1"></div>
-      <div class="field form-full"><label>Date</label><input type="date" id="c-date"></div>
-      <div class="field form-full"><label>Alteration notes</label><textarea id="c-notes"></textarea></div>
+      <div class="field"><label>Full name *</label><input type="text" id="a-name"></div>
+      <div class="field">
+        <label>Phone number *</label>
+        <input type="tel" inputmode="numeric" id="a-phone" oninput="window.validateAltPhone()">
+        <span class="field-hint" id="a-phone-hint">Not a standard 10-digit number — please double check.</span>
+      </div>
+      <div class="field"><label>Bill number *</label><input type="text" id="a-bill"></div>
+      <div class="field"><label>No. of pieces *</label><input type="number" id="a-pieces" min="1"></div>
+      <div class="field form-full"><label>Date</label><input type="date" id="a-date"></div>
+      <div class="field form-full"><label>Alteration notes</label><textarea id="a-notes"></textarea></div>
     </div>
-    <button class="submit-btn" id="c-submit-btn" onclick="submitCustomer()">Submit request</button>
+    <button class="submit-btn" id="a-submit-btn" onclick="submitAlteration()">Submit request</button>
   </div>
-  <div class="success-box" id="c-success">
+  <div class="success-box" id="alt-success">
     <div class="success-icon">✓</div>
-    <div class="success-name" id="c-success-name"></div>
-    <div class="success-msg">Your alteration request has been noted.<br>We'll give you a call as soon as it's ready.</div>
+    <div class="success-name" id="alt-success-name"></div>
+    <div class="success-msg">Your alteration request has been noted.<br>We'll call you as soon as it's ready.</div>
     <div class="success-store">Easy 2 Wear · Nungambakkam High Road, Chennai</div>
-    <button class="another-btn" onclick="resetCustomer()">Submit another request</button>
+    <button class="another-btn" onclick="resetAlt()">Submit another</button>
+  </div>
+</div>
+
+<!-- ORDERS SCREEN -->
+<div class="screen" id="screen-orders">
+  <div class="nav">
+    <button class="nav-btn" onclick="showScreen('alterations',this)">Alterations</button>
+    <button class="nav-btn active" onclick="showScreen('orders',this)">Orders</button>
+    <button class="nav-btn" onclick="showScreen('requirements',this)">Requirements</button>
+    <button class="nav-btn" onclick="showScreen('admin',this)">Admin</button>
+  </div>
+  <div class="brand"><div class="brand-name">EASY 2 WEAR</div><div class="brand-tag">Customer order</div><div class="brand-divider"></div></div>
+  <div class="card" id="ord-form-wrap">
+    <div class="card-title">Customer details</div>
+    <div class="form-grid">
+      <div class="field"><label>Full name *</label><input type="text" id="o-name"></div>
+      <div class="field"><label>Phone number *</label><input type="tel" inputmode="numeric" id="o-phone"></div>
+    </div>
+    <div class="divider-label">Staff fills below</div>
+    <div class="form-grid">
+      <div class="field form-full">
+        <label>Products *</label>
+        <div id="o-product-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:6px"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <input type="text" id="o-product-input" placeholder="Product name" style="flex:2;min-width:120px;font-size:14px;padding:9px 12px;border:1.5px solid #eee;border-radius:9px;background:#fafaf8;outline:none;font-family:inherit">
+          <input type="text" id="o-size-input" placeholder="Size" style="flex:1;min-width:70px;font-size:14px;padding:9px 12px;border:1.5px solid #eee;border-radius:9px;background:#fafaf8;outline:none;font-family:inherit">
+        </div>
+        <input type="text" id="o-desc-input" placeholder="Description / special note (optional)" style="width:100%;margin-top:6px;font-size:13px;padding:8px 12px;border:1.5px solid #eee;border-radius:9px;background:#fafaf8;outline:none;font-family:inherit" onkeydown="if(event.key==='Enter')addProduct()">
+        <button type="button" onclick="addProduct()" style="margin-top:6px;font-size:12px;font-weight:500;padding:8px 14px;border-radius:9px;border:1.5px solid #b2dfc4;background:transparent;color:#1a7a4a;cursor:pointer;font-family:inherit">+ Add product</button>
+      </div>
+      <div class="field"><label>Bill number</label><input type="text" id="o-bill"></div>
+      <div class="field">
+        <label>Payment status</label>
+        <select id="o-payment">
+          <option value="not_paid">Not paid</option>
+          <option value="partial">Partially paid</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+      <div class="field"><label>Order date</label><input type="date" id="o-date"></div>
+      <div class="field"><label>Expected delivery date</label><input type="date" id="o-delivery" placeholder="Select date"></div>
+      <div class="field form-full"><label>Notes</label><textarea id="o-notes"></textarea></div>
+    </div>
+    <button class="submit-btn" id="o-submit-btn" onclick="submitOrder()">Submit order</button>
+  </div>
+  <div class="success-box" id="ord-success">
+    <div class="success-icon">✓</div>
+    <div class="success-name" id="ord-success-name"></div>
+    <div class="success-msg">Order has been recorded successfully.</div>
+    <div class="success-store">Easy 2 Wear · Nungambakkam High Road, Chennai</div>
+    <button class="another-btn" onclick="resetOrder()">Add another order</button>
+  </div>
+</div>
+
+<!-- REQUIREMENTS SCREEN -->
+<div class="screen" id="screen-requirements">
+  <div class="nav">
+    <button class="nav-btn" onclick="showScreen('alterations',this)">Alterations</button>
+    <button class="nav-btn" onclick="showScreen('orders',this)">Orders</button>
+    <button class="nav-btn active" onclick="showScreen('requirements',this)">Requirements</button>
+    <button class="nav-btn" onclick="showScreen('admin',this)">Admin</button>
+  </div>
+  <div class="brand"><div class="brand-name">EASY 2 WEAR</div><div class="brand-tag">Customer requirement</div><div class="brand-divider"></div></div>
+  <div class="card" id="req-form-wrap">
+    <div class="card-title">Customer details</div>
+    <div class="form-grid">
+      <div class="field"><label>Full name *</label><input type="text" id="r-name"></div>
+      <div class="field"><label>Phone number *</label><input type="tel" inputmode="numeric" id="r-phone"></div>
+    </div>
+    <div class="divider-label">Staff fills below</div>
+    <div class="form-grid">
+      <div class="field form-full">
+        <label>Category</label>
+        <select id="r-category">
+          <option value="">Select category</option>
+          <option value="Men's">Men's</option>
+          <option value="Ladies">Ladies</option>
+          <option value="Kids">Kids</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+      </div>
+      <div class="field"><label>Product <span style="font-weight:400;color:#ccc;font-size:10px">optional</span></label><input type="text" id="r-product"></div>
+      <div class="field"><label>Size <span style="font-weight:400;color:#ccc;font-size:10px">optional</span></label><input type="text" id="r-size"></div>
+      <div class="field form-full"><label>Date</label><input type="date" id="r-date"></div>
+      <div class="field form-full"><label>Notes <span style="font-weight:400;color:#ccc;font-size:10px">optional</span></label><textarea id="r-notes"></textarea></div>
+    </div>
+    <button class="submit-btn" id="r-submit-btn" onclick="submitReq()">Submit requirement</button>
+  </div>
+  <div class="success-box" id="req-success">
+    <div class="success-icon">✓</div>
+    <div class="success-name" id="req-success-name"></div>
+    <div class="success-msg">Requirement has been noted.<br>We'll reach out when the product arrives.</div>
+    <div class="success-store">Easy 2 Wear · Nungambakkam High Road, Chennai</div>
+    <button class="another-btn" onclick="resetReq()">Add another</button>
   </div>
 </div>
 
 <!-- ADMIN SCREEN -->
-<div class="screen" id="screen-staff">
+<div class="screen" id="screen-admin">
   <div class="nav">
-    <button class="nav-btn" onclick="showScreen('customer',this)">Customer</button>
-    <button class="nav-btn active" onclick="showScreen('staff',this)">Admin</button>
+    <button class="nav-btn" onclick="showScreen('alterations',this)">Alterations</button>
+    <button class="nav-btn" onclick="showScreen('orders',this)">Orders</button>
+    <button class="nav-btn" onclick="showScreen('requirements',this)">Requirements</button>
+    <button class="nav-btn active" onclick="showScreen('admin',this)">Admin</button>
   </div>
-  <div class="stats">
-    <div class="stat stat-pending"><div class="stat-num" id="s-pending">—</div><div class="stat-lbl">Pending</div></div>
-    <div class="stat stat-ready"><div class="stat-num" id="s-ready">—</div><div class="stat-lbl">Ready</div></div>
-    <div class="stat stat-collected"><div class="stat-num" id="s-collected">—</div><div class="stat-lbl">Collected</div></div>
+  <div id="delivery-alerts"></div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="setAdminTab('alterations',this)">Alterations</button>
+    <button class="admin-tab" onclick="setAdminTab('orders',this)">Orders</button>
+    <button class="admin-tab" onclick="setAdminTab('requirements',this)">Requirements</button>
+  </div>
+  <div class="stats" id="admin-stats"></div>
+  <div class="period-bar">
+    <span class="period-lbl">View:</span>
+    <button class="period-btn active" onclick="setPeriod('all',this)">All time</button>
+    <button class="period-btn" onclick="setPeriod('day',this)">Today</button>
+    <button class="period-btn" onclick="setPeriod('week',this)">This week</button>
+    <button class="period-btn" onclick="setPeriod('month',this)">This month</button>
+    <button class="period-btn" onclick="setPeriod('year',this)">This year</button>
   </div>
   <div class="search-wrap">
     <span class="search-icon">⌕</span>
-    <input type="text" id="s-search" placeholder="Search by name, phone, bill number, notes…" oninput="renderStaff()">
+    <input type="text" id="s-search" placeholder="Search by name, phone, bill, product…" oninput="renderAdmin()">
   </div>
-  <div class="filters">
-    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
-    <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
-    <button class="filter-btn" onclick="setFilter('ready',this)">Ready</button>
-    <button class="filter-btn" onclick="setFilter('collected',this)">Collected</button>
-  </div>
-  <div id="s-list"><div class="loading">Loading…</div></div>
+  <div class="filters" id="admin-filters"></div>
+  <div id="admin-list"><div class="loading">Loading…</div></div>
 </div>
 
 </div>
 <div class="toast" id="toast"></div>
+
+<!-- Edit Alteration Modal -->
+<div class="modal-overlay" id="edit-alt-modal">
+  <div class="modal">
+    <div class="modal-title">Edit alteration</div>
+    <div class="form-grid">
+      <div class="field"><label>Full name *</label><input type="text" id="ea-name"></div>
+      <div class="field"><label>Phone *</label><input type="tel" id="ea-phone"></div>
+      <div class="field"><label>Bill number *</label><input type="text" id="ea-bill"></div>
+      <div class="field"><label>Pieces *</label><input type="number" id="ea-pieces" min="1"></div>
+      <div class="field form-full"><label>Date</label><input type="date" id="ea-date"></div>
+      <div class="field form-full"><label>Notes</label><textarea id="ea-notes"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('edit-alt-modal')">Cancel</button>
+      <button class="btn btn-green" onclick="saveEditAlt()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Order Modal -->
+<div class="modal-overlay" id="edit-ord-modal">
+  <div class="modal">
+    <div class="modal-title">Edit order</div>
+    <div class="form-grid">
+      <div class="field"><label>Full name *</label><input type="text" id="eo-name"></div>
+      <div class="field"><label>Phone *</label><input type="tel" id="eo-phone"></div>
+      <div class="field form-full"><label>Product description *</label><textarea id="eo-product"></textarea></div>
+      <div class="field"><label>Bill number</label><input type="text" id="eo-bill"></div>
+      <div class="field"><label>Amount (₹)</label><input type="number" id="eo-amount"></div>
+      <div class="field form-full"><label>Payment status</label>
+        <select id="eo-payment">
+          <option value="not_paid">Not paid</option>
+          <option value="partial">Partially paid</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+      <div class="field form-full"><label>Date</label><input type="date" id="eo-date"></div>
+      <div class="field form-full"><label>Expected delivery date</label><input type="date" id="eo-delivery"></div>
+      <div class="field form-full"><label>Notes</label><textarea id="eo-notes"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('edit-ord-modal')">Cancel</button>
+      <button class="btn btn-green" onclick="saveEditOrd()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Requirement Modal -->
+<div class="modal-overlay" id="edit-req-modal">
+  <div class="modal">
+    <div class="modal-title">Edit requirement</div>
+    <div class="form-grid">
+      <div class="field"><label>Full name *</label><input type="text" id="er-name"></div>
+      <div class="field"><label>Phone *</label><input type="tel" id="er-phone"></div>
+      <div class="field form-full"><label>Category</label>
+        <select id="er-category">
+          <option value="">Select category</option>
+          <option value="Men's">Men's</option>
+          <option value="Ladies">Ladies</option>
+          <option value="Kids">Kids</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+      </div>
+      <div class="field"><label>Product</label><input type="text" id="er-product"></div>
+      <div class="field"><label>Size</label><input type="text" id="er-size"></div>
+      <div class="field form-full"><label>Date</label><input type="date" id="er-date"></div>
+      <div class="field form-full"><label>Notes</label><textarea id="er-notes"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('edit-req-modal')">Cancel</button>
+      <button class="btn btn-green" onclick="saveEditReq()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Collect Modal -->
+<div class="modal-overlay" id="collect-modal">
+  <div class="modal">
+    <div class="modal-title" id="collect-modal-title">Mark as collected</div>
+    <div class="form-grid">
+      <div class="field form-full"><label>Collected by (name)</label><input type="text" id="col-name"></div>
+      <div class="field form-full"><label>Collected by (phone, optional)</label><input type="tel" id="col-phone"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('collect-modal')">Cancel</button>
+      <button class="btn btn-green" onclick="confirmCollect()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Phone History Modal -->
+<div class="modal-overlay" id="phone-modal">
+  <div class="modal">
+    <div class="modal-title" id="ph-modal-title">History</div>
+    <div id="ph-modal-content"></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal('phone-modal')">Close</button></div>
+  </div>
+</div>
 
 <script>
 const SUPA_URL='https://fivbheyjnaafqclphvjj.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpdmJoZXlqbmFhZnFjbHBodmpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3OTE2MzQsImV4cCI6MjA5MzM2NzYzNH0.dMZ76290NbICD9GruR85ZgR2glghTZjdezNFEp0L0OE';
 const HDR={'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
 
-let data=[],sFilter='all';
+let alterations=[],orders=[],requirements=[];
+let adminTab='alterations',sFilter='all',sPeriod='all';
+let editingId=null,collectingId=null,collectType=null;
 
 function today(){return new Date().toISOString().slice(0,10)}
-document.getElementById('c-date').value=today();
+document.querySelectorAll('input[type=date]').forEach(el=>el.value=today());
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+function norm(s){return(s||'').toLowerCase().replace(/[\s\-().+]/g,'');}
+function fuzzy(str,q){
+  const s=norm(str),qn=norm(q);
+  if(!qn)return true;
+  if(s.includes(qn))return true;
+  if(qn.length<3)return false;
+  let m=0;for(let i=0;i<qn.length;i++)if(s.includes(qn[i]))m++;
+  return m/qn.length>0.75;
 }
 
-async function fetchData(){
-  try{
-    const r=await fetch(SUPA_URL+'/rest/v1/alterations?order=created_at.desc',{headers:HDR});
-    data=await r.json();
-    if(!Array.isArray(data))data=[];
-  }catch(e){data=[];showToast('Connection error');}
-  renderStaff();
-}
-
-async function insertRow(row){
-  const r=await fetch(SUPA_URL+'/rest/v1/alterations',{method:'POST',headers:{...HDR,'Prefer':'return=minimal'},body:JSON.stringify(row)});
-  return r.ok;
-}
-
-async function updateRow(id,fields){
-  const r=await fetch(SUPA_URL+'/rest/v1/alterations?id=eq.'+id,{method:'PATCH',headers:{...HDR,'Prefer':'return=minimal'},body:JSON.stringify(fields)});
-  return r.ok;
-}
-
-async function deleteRow(id){
-  const r=await fetch(SUPA_URL+'/rest/v1/alterations?id=eq.'+id,{method:'DELETE',headers:HDR});
-  return r.ok;
+function periodStart(p){
+  const n=new Date();
+  if(p==='day')return today();
+  if(p==='week'){const d=new Date(n);d.setDate(n.getDate()-n.getDay());return d.toISOString().slice(0,10);}
+  if(p==='month')return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-01';
+  if(p==='year')return n.getFullYear()+'-01-01';
+  return null;
 }
 
 function fmt(iso){if(!iso)return'';const[y,m,d]=iso.split('-');return d+'/'+m+'/'+y}
-function ts(){const n=new Date();return n.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})+' · '+n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}
+function fmtFull(iso){if(!iso)return'Unknown';const[y,m,d]=iso.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return d+' '+mn[parseInt(m)-1]+' '+y;}
+function ts(){const n=new Date();return n.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})+' · '+n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
+
+// Supabase
+async function sb(path,method='GET',body=null){
+  const opts={method,headers:HDR};
+  if(body){opts.headers={...HDR,'Prefer':'return=minimal'};opts.body=JSON.stringify(body);}
+  const r=await fetch(SUPA_URL+path,opts);
+  if(method==='GET')return await r.json();
+  return r.ok;
+}
+
+async function fetchAll(){
+  try{
+    [alterations,orders,requirements]=await Promise.all([
+      sb('/rest/v1/alterations?order=date.desc,created_at.desc'),
+      sb('/rest/v1/orders?order=date.desc,created_at.desc'),
+      sb('/rest/v1/requirements?order=date.desc,created_at.desc')
+    ]);
+    if(!Array.isArray(alterations))alterations=[];
+    if(!Array.isArray(orders))orders=[];
+    if(!Array.isArray(requirements))requirements=[];
+  }catch(e){showToast('Connection error');}
+  renderDeliveryAlerts();
+  renderAdmin();
+}
 
 function showScreen(s,el){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  if(s==='staff')fetchData();
+  if(s==='admin')fetchAll();
 }
 
-async function submitCustomer(){
-  const name=document.getElementById('c-name').value.trim();
-  const phone=document.getElementById('c-phone').value.trim();
-  const bill=document.getElementById('c-bill').value.trim();
-  const pieces=parseInt(document.getElementById('c-pieces').value)||1;
-  const date=document.getElementById('c-date').value||today();
-  const notes=document.getElementById('c-notes').value.trim();
+// Product list for orders
+let oProducts=[];
+function addProduct(){
+  const inp=document.getElementById('o-product-input');
+  const sizeInp=document.getElementById('o-size-input');
+  const descInp=document.getElementById('o-desc-input');
+  const val=inp.value.trim();
+  const size=sizeInp.value.trim();
+  const desc=descInp.value.trim();
+  if(!val)return;
+  oProducts.push({name:val,size:size||'—',desc:desc||''});
+  inp.value='';sizeInp.value='';descInp.value='';
+  renderProductList();
+}
+function removeProduct(i){oProducts.splice(i,1);renderProductList();}
+function renderProductList(){
+  document.getElementById('o-product-list').innerHTML=oProducts.map((p,i)=>
+    `<div style="background:#f7f6f3;border-radius:7px;padding:7px 10px;font-size:13px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span><strong>${i+1}. ${p.name}</strong> <span style="color:#aaa;font-size:11px">· Size: ${p.size}</span></span>
+        <button onclick="removeProduct(${i})" style="border:none;background:none;color:#ccc;cursor:pointer;font-size:14px;padding:0 2px">✕</button>
+      </div>
+      ${p.desc?`<div style="font-size:11px;color:#aaa;margin-top:3px;">${p.desc}</div>`:''}
+    </div>`
+  ).join('');
+}
+
+
+window.validateAltPhone=function(){
+  const v=document.getElementById('a-phone').value.replace(/\D/g,'');
+  const hint=document.getElementById('a-phone-hint');
+  const inp=document.getElementById('a-phone');
+  if(v.length>0&&v.length!==10){inp.classList.add('error');hint.classList.add('show');}
+  else{inp.classList.remove('error');hint.classList.remove('show');}
+};
+
+// Submit alteration
+async function submitAlteration(){
+  const name=document.getElementById('a-name').value.trim();
+  const phone=document.getElementById('a-phone').value.replace(/\D/g,'');
+  const bill=document.getElementById('a-bill').value.trim();
+  const pieces=parseInt(document.getElementById('a-pieces').value)||1;
+  const date=document.getElementById('a-date').value||today();
+  const notes=document.getElementById('a-notes').value.trim();
   if(!name||!phone||!bill){showToast('Please fill name, phone and bill number.');return;}
-  const btn=document.getElementById('c-submit-btn');
+  if(phone.length<7||phone.length>15){showToast('Phone number is invalid.');return;}
+  const btn=document.getElementById('a-submit-btn');
   btn.disabled=true;btn.textContent='Submitting…';
-  const ok=await insertRow({id:Date.now().toString(),name,phone,bill,pieces,date,notes,status:'pending',logs:[]});
+  const ok=await sb('/rest/v1/alterations','POST',{id:Date.now().toString(),name,phone,bill,pieces,date,notes,status:'pending',logs:[]});
   btn.disabled=false;btn.textContent='Submit request';
-  if(!ok){showToast('Failed to save. Check connection.');return;}
-  document.getElementById('c-form-wrap').style.display='none';
-  document.getElementById('c-success-name').textContent='Thank you, '+name+'!';
-  document.getElementById('c-success').style.display='block';
+  if(!ok){showToast('Failed to save.');return;}
+  document.getElementById('alt-form-wrap').style.display='none';
+  document.getElementById('alt-success-name').textContent='Thank you, '+name+'!';
+  document.getElementById('alt-success').style.display='block';
+}
+function resetAlt(){
+  ['a-name','a-phone','a-bill','a-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('a-pieces').value='';
+  document.getElementById('a-date').value=today();
+  document.getElementById('a-phone').classList.remove('error');
+  document.getElementById('a-phone-hint').classList.remove('show');
+  document.getElementById('alt-form-wrap').style.display='block';
+  document.getElementById('alt-success').style.display='none';
 }
 
-function resetCustomer(){
-  ['c-name','c-phone','c-bill','c-notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('c-pieces').value='';
-  document.getElementById('c-date').value=today();
-  document.getElementById('c-form-wrap').style.display='block';
-  document.getElementById('c-success').style.display='none';
+// Submit order
+async function submitOrder(){
+  const name=document.getElementById('o-name').value.trim();
+  const phone=document.getElementById('o-phone').value.replace(/\D/g,'');
+  const bill=document.getElementById('o-bill').value.trim();
+  const amount=parseFloat(document.getElementById('o-amount').value)||0;
+  const payment=document.getElementById('o-payment').value;
+  const date=document.getElementById('o-date').value||today();
+  const delivery=document.getElementById('o-delivery').value||'';
+  const notes=document.getElementById('o-notes').value.trim();
+  if(!name||!phone||!oProducts.length){showToast('Please fill name, phone and add at least one product.');return;}
+  const btn=document.getElementById('o-submit-btn');
+  btn.disabled=true;btn.textContent='Submitting…';
+  const ok=await sb('/rest/v1/orders','POST',{id:Date.now().toString(),name,phone,product:oProducts.join('\n'),bill,amount,payment,date,delivery,notes,status:'pending',logs:[]});
+  btn.disabled=false;btn.textContent='Submit order';
+  if(!ok){showToast('Failed to save.');return;}
+  document.getElementById('ord-form-wrap').style.display='none';
+  document.getElementById('ord-success-name').textContent='Order recorded for '+name+'!';
+  document.getElementById('ord-success').style.display='block';
+}
+function resetOrder(){
+  ['o-name','o-phone','o-bill','o-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('o-amount').value='';
+  document.getElementById('o-payment').value='not_paid';
+  document.getElementById('o-date').value=today();
+  document.getElementById('o-delivery').value='';
+  document.getElementById('o-product-input').value='';
+  oProducts=[];renderProductList();
+  document.getElementById('ord-form-wrap').style.display='block';
+  document.getElementById('ord-success').style.display='none';
 }
 
+async function submitReq(){
+  const name=document.getElementById('r-name').value.trim();
+  const phone=document.getElementById('r-phone').value.replace(/\D/g,'');
+  const category=document.getElementById('r-category').value;
+  const product=document.getElementById('r-product').value.trim();
+  const size=document.getElementById('r-size').value.trim();
+  const date=document.getElementById('r-date').value||today();
+  const notes=document.getElementById('r-notes').value.trim();
+  if(!name||!phone){showToast('Please fill name and phone number.');return;}
+  const productStr=JSON.stringify({category,product,size});
+  const btn=document.getElementById('r-submit-btn');
+  btn.disabled=true;btn.textContent='Submitting…';
+  const ok=await sb('/rest/v1/requirements','POST',{id:Date.now().toString(),name,phone,product:productStr,date,notes,status:'open',logs:[]});
+  btn.disabled=false;btn.textContent='Submit requirement';
+  if(!ok){showToast('Failed to save.');return;}
+  document.getElementById('req-form-wrap').style.display='none';
+  document.getElementById('req-success-name').textContent='Noted for '+name+'!';
+  document.getElementById('req-success').style.display='block';
+}
+function resetReq(){
+  ['r-name','r-phone','r-product','r-size','r-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('r-category').value='';
+  document.getElementById('r-date').value=today();
+  document.getElementById('req-form-wrap').style.display='block';
+  document.getElementById('req-success').style.display='none';
+}
+
+// Admin
+function setAdminTab(t,el){
+  adminTab=t;sFilter='all';
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderAdmin();
+}
 function setFilter(f,el){
   sFilter=f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderAdmin();
+}
+function setPeriod(p,el){
+  sPeriod=p;
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  renderStaff();
+  renderAdmin();
 }
 
-function renderStaff(){
-  const q=(document.getElementById('s-search').value||'').toLowerCase();
-  document.getElementById('s-pending').textContent=data.filter(x=>x.status==='pending').length;
-  document.getElementById('s-ready').textContent=data.filter(x=>x.status==='ready').length;
-  document.getElementById('s-collected').textContent=data.filter(x=>x.status==='collected').length;
+function getDataSet(){return adminTab==='alterations'?alterations:adminTab==='orders'?orders:requirements;}
 
-  let list=sFilter==='all'?data:data.filter(x=>x.status===sFilter);
-  if(q)list=list.filter(x=>
-    x.name.toLowerCase().includes(q)||
-    x.phone.toLowerCase().includes(q)||
-    x.bill.toLowerCase().includes(q)||
-    (x.notes&&x.notes.toLowerCase().includes(q))||
-    String(x.pieces).includes(q)
-  );
+function renderAdmin(){
+  const ds=getDataSet();
+  const ps=periodStart(sPeriod);
+  const pd=ps?ds.filter(x=>x.date&&x.date>=ps):ds;
+  const q=(document.getElementById('s-search')||{}).value||'';
 
-  const el=document.getElementById('s-list');
+  // Stats
+  let statsHtml='';
+  if(adminTab==='alterations'){
+    statsHtml=`
+      <div class="stat stat-pending" onclick="setFilter('pending',null)"><div class="stat-num">${pd.filter(x=>x.status==='pending').length}</div><div class="stat-lbl">Pending</div></div>
+      <div class="stat stat-ready" onclick="setFilter('ready',null)"><div class="stat-num">${pd.filter(x=>x.status==='ready').length}</div><div class="stat-lbl">Ready</div></div>
+      <div class="stat stat-collected" onclick="setFilter('collected',null)"><div class="stat-num">${pd.filter(x=>x.status==='collected').length}</div><div class="stat-lbl">Collected</div></div>`;
+  } else if(adminTab==='orders'){
+    statsHtml=`
+      <div class="stat stat-pending" onclick="setFilter('pending',null)"><div class="stat-num">${pd.filter(x=>x.status==='pending').length}</div><div class="stat-lbl">Pending</div></div>
+      <div class="stat stat-ready" onclick="setFilter('ready',null)"><div class="stat-num">${pd.filter(x=>x.status==='ready').length}</div><div class="stat-lbl">Ready</div></div>
+      <div class="stat stat-collected" onclick="setFilter('delivered',null)"><div class="stat-num">${pd.filter(x=>x.status==='delivered').length}</div><div class="stat-lbl">Delivered</div></div>`;
+  } else {
+    statsHtml=`
+      <div class="stat stat-pending" onclick="setFilter('open',null)"><div class="stat-num">${pd.filter(x=>x.status==='open').length}</div><div class="stat-lbl">Open</div></div>
+      <div class="stat stat-ready" onclick="setFilter('notified',null)"><div class="stat-num">${pd.filter(x=>x.status==='notified').length}</div><div class="stat-lbl">Notified</div></div>
+      <div class="stat stat-collected" onclick="setFilter('fulfilled',null)"><div class="stat-num">${pd.filter(x=>x.status==='fulfilled').length}</div><div class="stat-lbl">Fulfilled</div></div>`;
+  }
+  document.getElementById('admin-stats').innerHTML=statsHtml;
+
+  // Filters
+  let filterOpts=[];
+  if(adminTab==='alterations')filterOpts=[['all','All'],['pending','Pending'],['ready','Ready'],['collected','Collected']];
+  else if(adminTab==='orders')filterOpts=[['all','All'],['pending','Pending'],['ready','Ready'],['delivered','Delivered']];
+  else filterOpts=[['all','All'],['open','Open'],['notified','Notified'],['fulfilled','Fulfilled']];
+  document.getElementById('admin-filters').innerHTML=filterOpts.map(([v,l])=>`<button class="filter-btn${sFilter===v?' active':''}" onclick="setFilter('${v}',this)">${l}</button>`).join('');
+
+  let list=sFilter==='all'?pd:pd.filter(x=>x.status===sFilter);
+  if(q)list=list.filter(x=>fuzzy(x.name,q)||fuzzy(x.phone,q)||fuzzy(x.bill,q)||fuzzy(x.product,q)||fuzzy(x.notes,q));
+  list=list.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.id||'').localeCompare(a.id||''));
+
+  const el=document.getElementById('admin-list');
   if(!list.length){el.innerHTML='<div class="empty">No entries found.</div>';return;}
 
-  el.innerHTML=list.map(e=>{
-    const bc=e.status==='pending'?'badge-pending':e.status==='ready'?'badge-ready':'badge-collected';
-    const bt=e.status==='pending'?'Pending':e.status==='ready'?'Ready':'Collected';
-    const logs=Array.isArray(e.logs)&&e.logs.length?`<div class="log-list">${e.logs.map(l=>`<div class="log-entry">${l}</div>`).join('')}</div>`:'';
-    const notes=e.notes?`<div class="entry-notes">${e.notes}</div>`:'';
-    const informed=Array.isArray(e.logs)&&e.logs.some(l=>l.startsWith('Called')||l.startsWith('WhatsApp')||l.startsWith('SMS'));
-    const actions=e.status==='pending'
-      ?`<button class="btn btn-green" onclick="markReady('${e.id}')">Mark as ready</button>`
-      :e.status==='ready'
-      ?`<button class="btn" onclick="logA('${e.id}','Called')">Called</button>
-        <button class="btn" onclick="logA('${e.id}','WhatsApp sent')">WhatsApp</button>
-        <button class="btn" onclick="logA('${e.id}','SMS sent')">SMS</button>
-        ${informed?`<button class="btn btn-green" onclick="markCollected('${e.id}')">Mark collected</button>`:`<span style="font-size:11px;color:#ccc;letter-spacing:.2px;">Inform customer first</span>`}`
-      :`<span style="font-size:12px;color:#ccc;letter-spacing:.2px;">Completed</span>`;
-    return `<div class="entry-card">
-      <div class="entry-head">
-        <div>
-          <div class="entry-name">${e.name}</div>
-          <div class="entry-meta">Bill <strong>${e.bill}</strong> &nbsp;·&nbsp; ${e.pieces} pc${e.pieces>1?'s':''} &nbsp;·&nbsp; ${fmt(e.date)}<br>${e.phone}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:7px;">
-          <span class="badge ${bc}">${bt}</span>
-          <button class="btn btn-red" onclick="del('${e.id}')">✕</button>
-        </div>
-      </div>
-      ${notes}${logs}
-      <div class="entry-actions">${actions}</div>
+  const groups={};
+  list.forEach(e=>{const dk=e.date||'unknown';if(!groups[dk])groups[dk]=[];groups[dk].push(e);});
+  let html='';
+  Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(dk=>{
+    html+=`<div class="day-sep"><div class="day-sep-line"></div><div class="day-sep-label">${fmtFull(dk)}</div><div class="day-sep-line"></div></div>`;
+    groups[dk].forEach(e=>{
+      html+= adminTab==='alterations'?renderAltCard(e):adminTab==='orders'?renderOrdCard(e):renderReqCard(e);
+    });
+  });
+  el.innerHTML=html;
+}
+
+function waLink(phone,msg){const p=phone.replace(/\D/g,'');const num=p.length===10?'91'+p:p;return`https://wa.me/${num}?text=${encodeURIComponent(msg)}`;}
+
+function renderAltCard(e){
+  const bc=e.status==='pending'?'badge-pending':e.status==='ready'?'badge-ready':'badge-collected';
+  const bt=e.status==='pending'?'Pending':e.status==='ready'?'Ready':'Collected';
+  const logs=Array.isArray(e.logs)&&e.logs.length?`<div class="log-list">${e.logs.map(l=>`<div class="log-entry">${l}</div>`).join('')}</div>`:'';
+  const notes=e.notes?`<div class="entry-notes">${e.notes}</div>`:'';
+  const informed=Array.isArray(e.logs)&&e.logs.some(l=>l.startsWith('Called')||l.startsWith('WhatsApp')||l.startsWith('SMS'));
+  const waMsg=`Hi ${e.name}, your alteration is ready for pickup at Easy 2 Wear, Nungambakkam High Road.\n\nBill No: ${e.bill||'—'}\nNo. of pieces: ${e.pieces}\n\nPlease visit us at your convenience. Thank you! 😊`;
+  let actions='';
+  if(e.status==='pending'){
+    actions=`<div class="entry-actions">
+      <button class="btn btn-green" onclick="altMarkReady('${e.id}')">Mark ready</button>
+      <button class="btn btn-blue" onclick="openEditAlt('${e.id}')">Edit</button>
+      <button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button>
+      <button class="btn btn-red" onclick="delEntry('${e.id}','alterations')">✕</button>
     </div>`;
-  }).join('');
+  } else if(e.status==='ready'){
+    actions=`<div class="entry-actions">
+      <a class="btn btn-green" href="${waLink(e.phone,waMsg)}" target="_blank" onclick="logAlt('${e.id}','WhatsApp sent')">💬 WhatsApp</a>
+      <button class="btn" onclick="logAlt('${e.id}','Called')">Called</button>
+      <button class="btn" onclick="logAlt('${e.id}','SMS sent')">SMS</button>
+      <button class="btn btn-blue" onclick="openEditAlt('${e.id}')">Edit</button>
+      <button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button>
+      <button class="btn btn-red" onclick="delEntry('${e.id}','alterations')">✕</button>
+    </div>
+    <div class="entry-actions-row2">
+      ${informed?`<button class="btn btn-green" onclick="openCollect('${e.id}','alteration')">✓ Mark collected</button>`:`<span style="font-size:11px;color:#ccc;">Inform customer before marking collected</span>`}
+    </div>`;
+  } else {
+    actions=`<div class="entry-actions"><button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button><button class="btn btn-red" onclick="delEntry('${e.id}','alterations')">✕</button><span style="font-size:11px;color:#ccc;margin-left:4px;">Completed</span></div>`;
+  }
+  return `<div class="entry-card">
+    <div class="entry-head">
+      <div><div class="entry-name">${e.name}</div>
+      <div class="entry-meta">Bill <strong>${e.bill||'—'}</strong> · ${e.pieces} pc${e.pieces>1?'s':''} · ${fmt(e.date)}<br>${e.phone}</div></div>
+      <span class="badge ${bc}">${bt}</span>
+    </div>${notes}${logs}${actions}</div>`;
 }
 
-async function markReady(id){
-  const e=data.find(x=>x.id===id);if(!e)return;
+function parseProducts(str){
+  try{const p=JSON.parse(str);if(Array.isArray(p))return p;}catch(e){}
+  return str.split('\n').map(s=>({name:s,size:'—'}));
+}
+
+function countNonSundayDays(fromDateStr){
+  const from=new Date(fromDateStr);
+  const now=new Date();
+  now.setHours(0,0,0,0);
+  from.setHours(0,0,0,0);
+  let count=0;
+  const d=new Date(from);
+  d.setDate(d.getDate()+1);
+  while(d<=now){if(d.getDay()!==0)count++;d.setDate(d.getDate()+1);}
+  return count;
+}
+
+function renderDeliveryAlerts(){
+  // Order delivery due tomorrow
+  const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+  const tStr=tomorrow.toISOString().slice(0,10);
+  const due=orders.filter(x=>x.delivery===tStr&&x.status!=='delivered');
+
+  // Alteration overdue (pending > 1 non-Sunday day)
+  const overdue=alterations.filter(x=>x.status==='pending'&&x.date&&countNonSundayDays(x.date)>1);
+
+  const el=document.getElementById('delivery-alerts');
+  let html='';
+  if(due.length){
+    html+=`<div class="alert-banner">
+      <div class="alert-banner-title">⚠️ Order delivery due tomorrow — ${due.length} order${due.length>1?'s':''}</div>
+      ${due.map(e=>`<div class="alert-item">• ${e.name} (${e.phone}) — ${parseProducts(e.product).map(p=>p.name).join(', ')}</div>`).join('')}
+    </div>`;
+  }
+  if(overdue.length){
+    html+=`<div class="alert-banner" style="background:#fdecea;border-color:#f5a0a0;">
+      <div class="alert-banner-title" style="color:#8a0000;">🔴 Alterations overdue — pending for more than 1 day</div>
+      ${overdue.map(e=>`<div class="alert-item" style="color:#6a0000;">• ${e.name} (${e.phone}) · Bill ${e.bill||'—'} · ${countNonSundayDays(e.date)} day${countNonSundayDays(e.date)>1?'s':''} pending</div>`).join('')}
+    </div>`;
+  }
+  el.innerHTML=html;
+}
+
+function renderOrdCard(e){
+  const bc=e.status==='pending'?'badge-pending':e.status==='ready'?'badge-ready':'badge-collected';
+  const bt=e.status==='pending'?'Pending':e.status==='ready'?'Ready':'Delivered';
+  const pc=e.payment==='paid'?'badge-paid':e.payment==='partial'?'badge-partial':'badge-notpaid';
+  const pt=e.payment==='paid'?'Paid':e.payment==='partial'?'Partial':'Not paid';
+  const logs=Array.isArray(e.logs)&&e.logs.length?`<div class="log-list">${e.logs.map(l=>`<div class="log-entry">${l}</div>`).join('')}</div>`:'';
+  const notes=e.notes?`<div class="entry-notes">${e.notes}</div>`:'';
+  const informed=Array.isArray(e.logs)&&e.logs.some(l=>l.startsWith('Called')||l.startsWith('WhatsApp')||l.startsWith('SMS'));
+  const prods=parseProducts(e.product);
+  const prodLines=prods.map((p,i)=>`${i+1}. ${p.name} <span style="color:#bbb;font-size:10px">· Size: ${p.size}</span>`).join('<br>');
+  const waMsg=`Hi ${e.name}, your order is ready for pickup at Easy 2 Wear, Nungambakkam High Road.\n\nItems:\n${prods.map((p,i)=>`${i+1}. ${p.name} (Size: ${p.size})`).join('\n')}\nBill No: ${e.bill||'—'}\n\nPlease visit us at your convenience. Thank you! 😊`;
+  const tomorrow=new Date();tomorrow.setDate(tomorrow.getDate()+1);
+  const isDueTomorrow=e.delivery===tomorrow.toISOString().slice(0,10)&&e.status!=='delivered';
+  let actions='';
+  if(e.status==='pending'){
+    actions=`<div class="entry-actions">
+      <button class="btn btn-green" onclick="ordMarkReady('${e.id}')">Mark ready</button>
+      <button class="btn btn-orange" onclick="cyclePayment('${e.id}')">Update payment</button>
+      <button class="btn btn-blue" onclick="openEditOrd('${e.id}')">Edit</button>
+      <button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button>
+      <button class="btn btn-red" onclick="delEntry('${e.id}','orders')">✕</button>
+    </div>`;
+  } else if(e.status==='ready'){
+    actions=`<div class="entry-actions">
+      <a class="btn btn-green" href="${waLink(e.phone,waMsg)}" target="_blank" onclick="logOrd('${e.id}','WhatsApp sent')">💬 WhatsApp</a>
+      <button class="btn" onclick="logOrd('${e.id}','Called')">Called</button>
+      <button class="btn" onclick="logOrd('${e.id}','SMS sent')">SMS</button>
+      <button class="btn btn-orange" onclick="cyclePayment('${e.id}')">Update payment</button>
+      <button class="btn btn-blue" onclick="openEditOrd('${e.id}')">Edit</button>
+      <button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button>
+      <button class="btn btn-red" onclick="delEntry('${e.id}','orders')">✕</button>
+    </div>
+    <div class="entry-actions-row2">
+      ${informed?`<button class="btn btn-green" onclick="openCollect('${e.id}','order')">✓ Mark delivered</button>`:`<span style="font-size:11px;color:#ccc;">Inform customer before marking delivered</span>`}
+    </div>`;
+  } else {
+    actions=`<div class="entry-actions"><button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button><button class="btn btn-red" onclick="delEntry('${e.id}','orders')">✕</button><span style="font-size:11px;color:#ccc;margin-left:4px;">Delivered</span></div>`;
+  }
+  return `<div class="entry-card" style="${isDueTomorrow?'border-color:#f0c040;':'}">
+    <div class="entry-head">
+      <div><div class="entry-name">${e.name}${isDueTomorrow?` <span style="font-size:10px;color:#9a6000;background:#fff8e6;padding:2px 7px;border-radius:10px;font-weight:500;">Due tomorrow</span>`:''}
+      </div>
+      <div class="entry-meta">${prodLines}<br>Bill <strong>${e.bill||'—'}</strong>${e.delivery?' · Delivery by <strong>'+fmt(e.delivery)+'</strong>':''}<br>${e.phone} · ${fmt(e.date)}</div></div>
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end"><span class="badge ${bc}">${bt}</span><span class="badge ${pc}">${pt}</span></div>
+    </div>${notes}${logs}${actions}</div>`;
+}
+
+function renderReqCard(e){
+  const bc=e.status==='open'?'badge-pending':e.status==='notified'?'badge-ready':'badge-collected';
+  const bt=e.status==='open'?'Open':e.status==='notified'?'Notified':'Fulfilled';
+  const logs=Array.isArray(e.logs)&&e.logs.length?`<div class="log-list">${e.logs.map(l=>`<div class="log-entry">${l}</div>`).join('')}</div>`:'';
+  const notes=e.notes?`<div class="entry-notes">${e.notes}</div>`:'';
+  const waMsg=`Hi ${e.name}, good news! The product you were looking for is now available at Easy 2 Wear, Nungambakkam High Road. Do visit us soon! 😊`;
+  let actions='';
+  if(e.status==='open'){
+    actions=`<div class="entry-actions">
+      <button class="btn btn-green" onclick="reqMarkNotified('${e.id}')">Product arrived — notify</button>
+      <button class="btn btn-blue" onclick="openEditReq('${e.id}')">Edit</button>
+      <button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button>
+      <button class="btn btn-red" onclick="delEntry('${e.id}','requirements')">✕</button>
+    </div>`;
+  } else if(e.status==='notified'){
+    actions=`<div class="entry-actions">
+      <a class="btn btn-green" href="${waLink(e.phone,waMsg)}" target="_blank" onclick="logReq('${e.id}','WhatsApp sent')">💬 WhatsApp</a>
+      <button class="btn" onclick="logReq('${e.id}','Called')">Called</button>
+      <button class="btn" onclick="logReq('${e.id}','SMS sent')">SMS</button>
+      <button class="btn btn-green" onclick="reqMarkFulfilled('${e.id}')">Mark fulfilled</button>
+      <button class="btn btn-blue" onclick="openEditReq('${e.id}')">Edit</button>
+      <button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button>
+      <button class="btn btn-red" onclick="delEntry('${e.id}','requirements')">✕</button>
+    </div>`;
+  } else {
+    actions=`<div class="entry-actions"><button class="btn btn-purple" onclick="showHistory('${e.phone}')">History</button><button class="btn btn-red" onclick="delEntry('${e.id}','requirements')">✕</button><span style="font-size:11px;color:#ccc;margin-left:4px;">Fulfilled</span></div>`;
+  }
+  return `<div class="entry-card">
+    <div class="entry-head">
+      <div><div class="entry-name">${e.name}</div>
+      <div class="entry-meta">${e.product}<br>${e.phone} · ${fmt(e.date)}</div></div>
+      <span class="badge ${bc}">${bt}</span>
+    </div>${notes}${logs}${actions}</div>`;
+}
+
+// Alteration actions
+async function altMarkReady(id){
+  const e=alterations.find(x=>x.id===id);if(!e)return;
   const logs=[...(e.logs||[]),'Marked ready — '+ts()];
-  const ok=await updateRow(id,{status:'ready',logs});
-  if(ok){e.status='ready';e.logs=logs;renderStaff();showToast('Marked as ready');}
-  else showToast('Update failed');
+  if(await sb('/rest/v1/alterations?id=eq.'+id,'PATCH',{status:'ready',logs})){e.status='ready';e.logs=logs;renderAdmin();showToast('Marked as ready');}
 }
-
-async function markCollected(id){
-  const e=data.find(x=>x.id===id);if(!e)return;
-  const logs=[...(e.logs||[]),'Collected — '+ts()];
-  const ok=await updateRow(id,{status:'collected',logs});
-  if(ok){e.status='collected';e.logs=logs;renderStaff();showToast('Marked as collected');}
-  else showToast('Update failed');
-}
-
-async function logA(id,type){
-  const e=data.find(x=>x.id===id);if(!e)return;
+async function logAlt(id,type){
+  const e=alterations.find(x=>x.id===id);if(!e)return;
   const logs=[...(e.logs||[]),type+' — '+ts()];
-  const ok=await updateRow(id,{logs});
-  if(ok){e.logs=logs;renderStaff();showToast(type+' logged');}
+  if(await sb('/rest/v1/alterations?id=eq.'+id,'PATCH',{logs})){e.logs=logs;renderAdmin();showToast(type+' logged');}
+}
+
+// Order actions
+async function ordMarkReady(id){
+  const e=orders.find(x=>x.id===id);if(!e)return;
+  const logs=[...(e.logs||[]),'Marked ready — '+ts()];
+  if(await sb('/rest/v1/orders?id=eq.'+id,'PATCH',{status:'ready',logs})){e.status='ready';e.logs=logs;renderAdmin();showToast('Order marked ready');}
+}
+async function logOrd(id,type){
+  const e=orders.find(x=>x.id===id);if(!e)return;
+  const logs=[...(e.logs||[]),type+' — '+ts()];
+  if(await sb('/rest/v1/orders?id=eq.'+id,'PATCH',{logs})){e.logs=logs;renderAdmin();showToast(type+' logged');}
+}
+async function cyclePayment(id){
+  const e=orders.find(x=>x.id===id);if(!e)return;
+  const next=e.payment==='not_paid'?'partial':e.payment==='partial'?'paid':'not_paid';
+  if(await sb('/rest/v1/orders?id=eq.'+id,'PATCH',{payment:next})){e.payment=next;renderAdmin();showToast('Payment updated to: '+next.replace('_',' '));}
+}
+
+// Requirement actions
+async function reqMarkNotified(id){
+  const e=requirements.find(x=>x.id===id);if(!e)return;
+  const logs=[...(e.logs||[]),'Product arrived — customer notified — '+ts()];
+  if(await sb('/rest/v1/requirements?id=eq.'+id,'PATCH',{status:'notified',logs})){e.status='notified';e.logs=logs;renderAdmin();showToast('Marked as notified');}
+}
+async function reqMarkFulfilled(id){
+  const e=requirements.find(x=>x.id===id);if(!e)return;
+  const logs=[...(e.logs||[]),'Fulfilled — '+ts()];
+  if(await sb('/rest/v1/requirements?id=eq.'+id,'PATCH',{status:'fulfilled',logs})){e.status='fulfilled';e.logs=logs;renderAdmin();showToast('Marked as fulfilled');}
+}
+async function logReq(id,type){
+  const e=requirements.find(x=>x.id===id);if(!e)return;
+  const logs=[...(e.logs||[]),type+' — '+ts()];
+  if(await sb('/rest/v1/requirements?id=eq.'+id,'PATCH',{logs})){e.logs=logs;renderAdmin();showToast(type+' logged');}
+}
+
+// Collect
+function openCollect(id,type){collectingId=id;collectType=type;document.getElementById('col-name').value='';document.getElementById('col-phone').value='';document.getElementById('collect-modal-title').textContent=type==='order'?'Mark as delivered':'Mark as collected';document.getElementById('collect-modal').classList.add('open');}
+async function confirmCollect(){
+  const colName=document.getElementById('col-name').value.trim();
+  const colPhone=document.getElementById('col-phone').value.trim();
+  const isOrder=collectType==='order';
+  const ds=isOrder?orders:alterations;
+  const e=ds.find(x=>x.id===collectingId);if(!e)return;
+  let logMsg=(isOrder?'Delivered':'Collected')+' — '+ts();
+  if(colName)logMsg+=` | By: ${colName}`;
+  if(colPhone)logMsg+=` (${colPhone})`;
+  const logs=[...(e.logs||[]),logMsg];
+  const table=isOrder?'orders':'alterations';
+  const newStatus=isOrder?'delivered':'collected';
+  if(await sb('/rest/v1/'+table+'?id=eq.'+collectingId,'PATCH',{status:newStatus,logs})){e.status=newStatus;e.logs=logs;closeModal('collect-modal');renderAdmin();showToast(isOrder?'Marked as delivered':'Marked as collected');}
   else showToast('Update failed');
 }
 
-async function del(id){
-  if(!confirm('Delete this entry?'))return;
-  const ok=await deleteRow(id);
-  if(ok){data=data.filter(x=>x.id!==id);renderStaff();showToast('Entry deleted');}
-  else showToast('Delete failed');
+// Edit alteration
+function openEditAlt(id){
+  const e=alterations.find(x=>x.id===id);if(!e)return;
+  editingId=id;
+  document.getElementById('ea-name').value=e.name||'';document.getElementById('ea-phone').value=e.phone||'';
+  document.getElementById('ea-bill').value=e.bill||'';document.getElementById('ea-pieces').value=e.pieces||'';
+  document.getElementById('ea-date').value=e.date||today();document.getElementById('ea-notes').value=e.notes||'';
+  document.getElementById('edit-alt-modal').classList.add('open');
+}
+async function saveEditAlt(){
+  const name=document.getElementById('ea-name').value.trim();const phone=document.getElementById('ea-phone').value.trim();
+  const bill=document.getElementById('ea-bill').value.trim();const pieces=parseInt(document.getElementById('ea-pieces').value)||1;
+  const date=document.getElementById('ea-date').value;const notes=document.getElementById('ea-notes').value.trim();
+  if(!name||!phone||!bill){showToast('Please fill required fields.');return;}
+  if(await sb('/rest/v1/alterations?id=eq.'+editingId,'PATCH',{name,phone,bill,pieces,date,notes})){
+    const e=alterations.find(x=>x.id===editingId);if(e)Object.assign(e,{name,phone,bill,pieces,date,notes});
+    closeModal('edit-alt-modal');renderAdmin();showToast('Updated');
+  }
 }
 
-fetchData();
+// Edit order
+function openEditOrd(id){
+  const e=orders.find(x=>x.id===id);if(!e)return;
+  editingId=id;
+  document.getElementById('eo-name').value=e.name||'';document.getElementById('eo-phone').value=e.phone||'';
+  document.getElementById('eo-product').value=e.product||'';document.getElementById('eo-bill').value=e.bill||'';
+  document.getElementById('eo-amount').value=e.amount||'';document.getElementById('eo-payment').value=e.payment||'not_paid';
+  document.getElementById('eo-date').value=e.date||today();document.getElementById('eo-notes').value=e.notes||'';
+  document.getElementById('edit-ord-modal').classList.add('open');
+}
+async function saveEditOrd(){
+  const name=document.getElementById('eo-name').value.trim();const phone=document.getElementById('eo-phone').value.trim();
+  const product=document.getElementById('eo-product').value.trim();const bill=document.getElementById('eo-bill').value.trim();
+  const amount=parseFloat(document.getElementById('eo-amount').value)||0;const payment=document.getElementById('eo-payment').value;
+  const date=document.getElementById('eo-date').value;const notes=document.getElementById('eo-notes').value.trim();
+  if(!name||!phone||!product){showToast('Please fill required fields.');return;}
+  if(await sb('/rest/v1/orders?id=eq.'+editingId,'PATCH',{name,phone,product,bill,amount,payment,date,notes})){
+    const e=orders.find(x=>x.id===editingId);if(e)Object.assign(e,{name,phone,product,bill,amount,payment,date,notes});
+    closeModal('edit-ord-modal');renderAdmin();showToast('Updated');
+  }
+}
+
+function openEditReq(id){
+  const e=requirements.find(x=>x.id===id);if(!e)return;
+  editingId=id;
+  const rp=parseReqProduct(e.product);
+  document.getElementById('er-name').value=e.name||'';
+  document.getElementById('er-phone').value=e.phone||'';
+  document.getElementById('er-category').value=rp.category||'';
+  document.getElementById('er-product').value=rp.product||'';
+  document.getElementById('er-size').value=rp.size||'';
+  document.getElementById('er-date').value=e.date||today();
+  document.getElementById('er-notes').value=e.notes||'';
+  document.getElementById('edit-req-modal').classList.add('open');
+}
+async function saveEditReq(){
+  const name=document.getElementById('er-name').value.trim();
+  const phone=document.getElementById('er-phone').value.trim();
+  const category=document.getElementById('er-category').value;
+  const product=document.getElementById('er-product').value.trim();
+  const size=document.getElementById('er-size').value.trim();
+  const date=document.getElementById('er-date').value;
+  const notes=document.getElementById('er-notes').value.trim();
+  if(!name||!phone){showToast('Please fill required fields.');return;}
+  const productStr=JSON.stringify({category,product,size});
+  if(await sb('/rest/v1/requirements?id=eq.'+editingId,'PATCH',{name,phone,product:productStr,date,notes})){
+    const e=requirements.find(x=>x.id===editingId);
+    if(e)Object.assign(e,{name,phone,product:productStr,date,notes});
+    closeModal('edit-req-modal');renderAdmin();showToast('Updated');
+  }
+}
+
+// Delete
+async function delEntry(id,table){
+  const ds=table==='alterations'?alterations:table==='orders'?orders:requirements;
+  const e=ds.find(x=>x.id===id);if(!e)return;
+  const c=prompt(`Type DELETE to confirm removing ${e.name}'s entry:`);
+  if(c!=='DELETE'){showToast('Cancelled.');return;}
+  if(await sb('/rest/v1/'+table+'?id=eq.'+id,'DELETE')){
+    if(table==='alterations')alterations=alterations.filter(x=>x.id!==id);
+    else if(table==='orders')orders=orders.filter(x=>x.id!==id);
+    else requirements=requirements.filter(x=>x.id!==id);
+    renderAdmin();showToast('Deleted');
+  }
+}
+
+// History
+function showHistory(phone){
+  const all=[
+    ...alterations.filter(x=>norm(x.phone)===norm(phone)).map(x=>({...x,_type:'Alteration'})),
+    ...orders.filter(x=>norm(x.phone)===norm(phone)).map(x=>({...x,_type:'Order'})),
+    ...requirements.filter(x=>norm(x.phone)===norm(phone)).map(x=>({...x,_type:'Requirement'}))
+  ].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const name=all[0]?all[0].name:'Customer';
+  document.getElementById('ph-modal-title').textContent=`History — ${name} (${phone})`;
+  document.getElementById('ph-modal-content').innerHTML=all.length?all.map(e=>{
+    const sc=e.status==='pending'||e.status==='open'?'#b07800':e.status==='collected'||e.status==='delivered'||e.status==='fulfilled'?'#1a52a0':'#1a7a4a';
+    return `<div class="ph-entry"><strong>${e._type}</strong> · ${fmt(e.date)} · <span style="color:${sc};font-weight:500">${e.status}</span><br>${e.product||e.bill?`${e.product||''} ${e.bill?'· Bill '+e.bill:''}`:''}</div>`;
+  }).join(''):'<p style="color:#bbb;font-size:13px;">No history found.</p>';
+  document.getElementById('phone-modal').classList.add('open');
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(el=>el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
 </script>
 </body>
 </html>
