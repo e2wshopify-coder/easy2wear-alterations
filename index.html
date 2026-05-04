@@ -431,6 +431,8 @@ function validateAltPhone(){
 }
 
 async function submitAlteration(){
+  var SURL='https://fivbheyjnaafqclphvjj.supabase.co';
+  var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpdmJoZXlqbmFhZnFjbHBodmpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3OTE2MzQsImV4cCI6MjA5MzM2NzYzNH0.dMZ76290NbICD9GruR85ZgR2glghTZjdezNFEp0L0OE';
   var name=document.getElementById('a-name').value.trim();
   var phone=document.getElementById('a-phone').value.replace(/\D/g,'');
   var bill=document.getElementById('a-bill').value.trim();
