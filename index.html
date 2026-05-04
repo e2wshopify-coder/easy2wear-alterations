@@ -368,16 +368,6 @@ body{font-family:'Inter',sans-serif;background:#f7f6f3;min-height:100vh;color:#1
 </div>
 
 <script>
-// Password protection
-var APP_PASS='admin';
-function checkLogin(){
-  if(localStorage.getItem('e2w_auth')===APP_PASS)return true;
-  var entered=prompt('Enter password to access Easy 2 Wear Store Manager:');
-  if(entered===APP_PASS){localStorage.setItem('e2w_auth',APP_PASS);return true;}
-  document.body.innerHTML='<div style="text-align:center;padding:4rem;font-family:Inter,sans-serif;color:#888;">Incorrect password. Please refresh and try again.</div>';
-  return false;
-}
-if(!checkLogin()){document.body.style.display='none';}
 
 'https://fivbheyjnaafqclphvjj.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpdmJoZXlqbmFhZnFjbHBodmpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3OTE2MzQsImV4cCI6MjA5MzM2NzYzNH0.dMZ76290NbICD9GruR85ZgR2glghTZjdezNFEp0L0OE';
@@ -449,15 +439,26 @@ async function submitAlteration(){
   var date=document.getElementById('a-date').value||today();
   var notes=document.getElementById('a-notes').value.trim();
   if(!name||!phone||!bill){showToast('Please fill name, phone and bill number.');return;}
-  if(phone.length<7||phone.length>15){showToast('Phone number is invalid.');return;}
   var btn=document.getElementById('a-submit-btn');
   btn.disabled=true;btn.textContent='Submitting…';
-  var ok=await sb('/rest/v1/alterations','POST',{id:Date.now().toString(),name:name,phone:phone,bill:bill,pieces:pieces,date:date,notes:notes,status:'pending',logs:[]});
+  try{
+    var response=await fetch(SURL+'/rest/v1/alterations',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SKEY,'Authorization':'Bearer '+SKEY,'Prefer':'return=minimal'},
+      body:JSON.stringify({id:Date.now().toString(),name:name,phone:phone,bill:bill,pieces:pieces,date:date,notes:notes,status:'pending',logs:[]})
+    });
+    if(response.ok){
+      document.getElementById('alt-form-wrap').style.display='none';
+      document.getElementById('alt-success-name').textContent='Thank you, '+name+'!';
+      document.getElementById('alt-success').style.display='block';
+    } else {
+      var err=await response.text();
+      showToast('Error: '+response.status+' '+err.slice(0,50));
+    }
+  } catch(e){
+    showToast('Network error: '+e.message);
+  }
   btn.disabled=false;btn.textContent='Submit request';
-  if(!ok){showToast('Failed to save.');return;}
-  document.getElementById('alt-form-wrap').style.display='none';
-  document.getElementById('alt-success-name').textContent='Thank you, '+name+'!';
-  document.getElementById('alt-success').style.display='block';
 }
 
 function resetAlt(){
