@@ -208,19 +208,23 @@ body{font-family:'Inter',sans-serif;background:#f7f6f3;min-height:100vh;color:#1
       <div class="field"><label>Full name *</label><input type="text" id="r-name"></div>
       <div class="field"><label>Phone number *</label><input type="tel" inputmode="numeric" id="r-phone"></div>
     </div>
-    <div class="divider-label">Staff fills below</div>
     <div class="form-grid">
-      <div class="field form-full"><label>Category</label>
-        <select id="r-category">
-          <option value="">Select category</option>
-          <option value="Men's">Men's</option>
-          <option value="Ladies">Ladies</option>
-          <option value="Kids">Kids</option>
-          <option value="Accessories">Accessories</option>
-        </select>
+      <div class="field form-full">
+        <label>Products <span style="font-weight:400;color:#ccc;font-size:10px">optional</span></label>
+        <div id="r-product-list"></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+          <select id="r-category-input" style="flex:1;min-width:100px;font-size:13px;padding:8px 10px;border:1.5px solid #eee;border-radius:9px;background:#fafaf8;outline:none;font-family:inherit">
+            <option value="">Category</option>
+            <option value="Men's">Men's</option>
+            <option value="Ladies">Ladies</option>
+            <option value="Kids">Kids</option>
+            <option value="Accessories">Accessories</option>
+          </select>
+          <input type="text" id="r-product-input" placeholder="Product" style="flex:2;min-width:100px;font-size:13px;padding:8px 10px;border:1.5px solid #eee;border-radius:9px;background:#fafaf8;outline:none;font-family:inherit">
+          <input type="text" id="r-size-input" placeholder="Size" style="flex:1;min-width:60px;font-size:13px;padding:8px 10px;border:1.5px solid #eee;border-radius:9px;background:#fafaf8;outline:none;font-family:inherit" onkeydown="if(event.key==='Enter')addReqProduct()">
+        </div>
+        <button type="button" onclick="addReqProduct()" style="margin-top:6px;font-size:12px;font-weight:500;padding:8px 14px;border-radius:9px;border:1.5px solid #b2dfc4;background:transparent;color:#1a7a4a;cursor:pointer;font-family:inherit">+ Add product</button>
       </div>
-      <div class="field"><label>Product <span style="font-weight:400;color:#ccc;font-size:10px">optional</span></label><input type="text" id="r-product"></div>
-      <div class="field"><label>Size <span style="font-weight:400;color:#ccc;font-size:10px">optional</span></label><input type="text" id="r-size"></div>
       <div class="field form-full"><label>Date</label><input type="date" id="r-date"></div>
       <div class="field form-full"><label>Notes <span style="font-weight:400;color:#ccc;font-size:10px">optional</span></label><textarea id="r-notes"></textarea></div>
     </div>
@@ -373,7 +377,7 @@ function checkLogin(){
   document.body.innerHTML='<div style="text-align:center;padding:4rem;font-family:Inter,sans-serif;color:#888;">Incorrect password. Please refresh and try again.</div>';
   return false;
 }
-if(!checkLogin()){throw new Error('Unauthorized');}
+if(!checkLogin()){document.body.style.display='none';}
 
 'https://fivbheyjnaafqclphvjj.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpdmJoZXlqbmFhZnFjbHBodmpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3OTE2MzQsImV4cCI6MjA5MzM2NzYzNH0.dMZ76290NbICD9GruR85ZgR2glghTZjdezNFEp0L0OE';
