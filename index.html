@@ -392,24 +392,30 @@ function countNonSundays(fromStr){var from=new Date(fromStr);var now=new Date();
 function waLink(phone,msg){var p=phone.replace(/\D/g,'');var num=p.length===10?'91'+p:p;return'https://wa.me/'+num+'?text='+encodeURIComponent(msg);}
 
 async function sb(path,method,body){
-  var opts={method:method||'GET',headers:HDR};
-  if(body){opts.headers=Object.assign({},HDR,{'Prefer':'return=minimal'});opts.body=JSON.stringify(body);}
-  var r=await fetch(SURL+path,opts);
+  var url=getURL();
+  var key=getKEY();
+  var headers={'Content-Type':'application/json','apikey':key,'Authorization':'Bearer '+key};
+  var opts={method:method||'GET',headers:headers};
+  if(body){opts.headers['Prefer']='return=minimal';opts.body=JSON.stringify(body);}
+  var r=await fetch(url+path,opts);
   if((method||'GET')==='GET')return await r.json();
   return r.ok;
 }
 
 async function fetchAll(){
   try{
+    var url=getURL();
+    var key=getKEY();
+    var headers={'Content-Type':'application/json','apikey':key,'Authorization':'Bearer '+key};
     var results=await Promise.all([
-      sb('/rest/v1/alterations?order=date.desc,created_at.desc'),
-      sb('/rest/v1/orders?order=date.desc,created_at.desc'),
-      sb('/rest/v1/requirements?order=date.desc,created_at.desc')
+      fetch(url+'/rest/v1/alterations?order=date.desc,created_at.desc',{headers:headers}).then(function(r){return r.json();}),
+      fetch(url+'/rest/v1/orders?order=date.desc,created_at.desc',{headers:headers}).then(function(r){return r.json();}),
+      fetch(url+'/rest/v1/requirements?order=date.desc,created_at.desc',{headers:headers}).then(function(r){return r.json();})
     ]);
     alterations=Array.isArray(results[0])?results[0]:[];
     orders=Array.isArray(results[1])?results[1]:[];
     requirements=Array.isArray(results[2])?results[2]:[];
-  }catch(e){showToast('Connection error');}
+  }catch(e){showToast('Connection error: '+e.message);}
   renderDeliveryAlerts();
   renderAdmin();
 }
