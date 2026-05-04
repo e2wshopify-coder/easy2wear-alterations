@@ -433,7 +433,7 @@ async function fetchAll(){
   renderAdmin();
 }
 
-function showScreen(s,el){
+window.showScreen=function(s,el){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('screen-'+s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -566,19 +566,19 @@ function resetReq(){
 }
 
 // Admin
-function setAdminTab(t,el){
+window.setAdminTab=function(t,el){
   adminTab=t;sFilter='all';
   document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   renderAdmin();
 }
-function setFilter(f,el){
+window.setFilter=function(f,el){
   sFilter=f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   if(el)el.classList.add('active');
   renderAdmin();
 }
-function setPeriod(p,el){
+window.setPeriod=function(p,el){
   sPeriod=p;
   document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
