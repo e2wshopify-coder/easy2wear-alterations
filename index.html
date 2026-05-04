@@ -243,6 +243,9 @@ body{font-family:'Inter',sans-serif;background:#f7f6f3;min-height:100vh;color:#1
     <button class="nav-btn active" onclick="showScreen('admin',this)">Admin</button>
   </div>
   <div id="delivery-alerts"></div>
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+    <button class="btn btn-green" onclick="exportCustomers()" style="font-size:12px;padding:6px 14px;">⬇ Export customers</button>
+  </div>
   <div class="admin-tabs">
     <button class="admin-tab active" onclick="setAdminTab('alterations',this)">Alterations</button>
     <button class="admin-tab" onclick="setAdminTab('orders',this)">Orders</button>
@@ -361,7 +364,18 @@ body{font-family:'Inter',sans-serif;background:#f7f6f3;min-height:100vh;color:#1
 </div>
 
 <script>
-var SURL='https://fivbheyjnaafqclphvjj.supabase.co';
+// Password protection
+var APP_PASS='admin';
+function checkLogin(){
+  if(localStorage.getItem('e2w_auth')===APP_PASS)return true;
+  var entered=prompt('Enter password to access Easy 2 Wear Store Manager:');
+  if(entered===APP_PASS){localStorage.setItem('e2w_auth',APP_PASS);return true;}
+  document.body.innerHTML='<div style="text-align:center;padding:4rem;font-family:Inter,sans-serif;color:#888;">Incorrect password. Please refresh and try again.</div>';
+  return false;
+}
+if(!checkLogin()){throw new Error('Unauthorized');}
+
+'https://fivbheyjnaafqclphvjj.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpdmJoZXlqbmFhZnFjbHBodmpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3OTE2MzQsImV4cCI6MjA5MzM2NzYzNH0.dMZ76290NbICD9GruR85ZgR2glghTZjdezNFEp0L0OE';
 var HDR={'Content-Type':'application/json','apikey':SKEY,'Authorization':'Bearer '+SKEY};
 var alterations=[],orders=[],requirements=[];
