@@ -823,8 +823,6 @@ function renderAltCard(e, q) {
   var notes = e.notes ? '<div class="entry-notes">' + e.notes + '</div>' : '';
   return '<div class="entry-card"><div class="entry-head"><div><div class="entry-name">' + hl(e.name, q) + '</div><div class="entry-meta">Bill <strong>' + hl(e.bill || '-', q) + '</strong> - ' + e.pieces + ' pc' + (e.pieces > 1 ? 's' : '') + ' - ' + fmt(e.date) + '<br>' + hl(e.phone, q) + '</div></div><span class="badge ' + bc + '">' + bt + '</span></div>' + notes + logsHTML(e.logs) + acts + '</div>';
 }
-
-function renderOrdCard(e, q) {
   var bc = e.status === 'pending' ? 'badge-pending' : e.status === 'ready' ? 'badge-ready' : 'badge-collected';
   var bt = e.status === 'pending' ? 'Pending' : e.status === 'ready' ? 'Ready' : 'Delivered';
   var pc = e.payment === 'paid' ? 'badge-paid' : e.payment === 'partial' ? 'badge-partial' : 'badge-notpaid';
